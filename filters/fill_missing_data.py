@@ -41,7 +41,7 @@ def fetch_data_for_issuer(issuer, last_checked_date):
     filtered_data = new_data[
         (new_data["BEST turnover in denars"] != 0) |
         (new_data["Total turnover in denars"] != 0)
-    ]
+        ]
 
     filtered_data.loc[:, "BEST turnover in denars"] = filtered_data["BEST turnover in denars"].fillna(0)
     filtered_data.loc[:, "Total turnover in denars"] = filtered_data["Total turnover in denars"].fillna(0)
@@ -74,6 +74,8 @@ def process_and_save_data(issuer, data):
         "%пром.", "Количина", "Промет во БЕСТ во денари", "Вкупен промет во денари"
     ]
 
+    data['Датум'] = pd.to_datetime(data['Датум'], errors='coerce').dt.strftime('%d.%m.%Y')
+
     data = filter_data(data)
 
     save_to_csv(issuer, data)
@@ -88,7 +90,7 @@ def filter_data(data):
 
     filtered_data = data[
         (data["Промет во БЕСТ во денари"] != 0) | (data["Вкупен промет во денари"] != 0)
-    ]
+        ]
 
     return filtered_data
 
