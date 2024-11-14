@@ -1,4 +1,4 @@
-#new.main.main.py
+#main.main.py
 from filters.fetch_issuers import fetch_issuers
 from filters.fill_missing_data import fill_missing_data
 from filters.timer import timer_start, timer_end
