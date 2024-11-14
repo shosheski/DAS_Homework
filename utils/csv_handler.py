@@ -19,8 +19,11 @@ def save_to_csv(issuer, data):
         print(f"No valid data to save for issuer {issuer}. Skipping...")
         return
 
-    output_dir = f"database/{issuer}.csv"
-    os.makedirs(os.path.dirname(output_dir), exist_ok=True)
+    project_root = os.path.dirname(os.path.abspath(__file__))
+    database_dir = os.path.join(project_root, '..', 'database')
+
+    output_dir = os.path.join(database_dir, f"{issuer}.csv")
+    os.makedirs(database_dir, exist_ok=True)
 
     try:
         filtered_data.to_csv(output_dir, index=False)
