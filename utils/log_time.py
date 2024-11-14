@@ -1,4 +1,3 @@
-# utils/log_time.py
 import time
 import os
 

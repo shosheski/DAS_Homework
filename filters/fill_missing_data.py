@@ -1,36 +1,22 @@
-#filters.fill_missing_data.py
 import pandas as pd
 import requests
 from datetime import datetime, timedelta
-from utils.transform_utils import (transform_date_to_string,
-                                       get_soup_df, get_response_with_session)
+from filters.check_last_date import update_last_checked_date
 from utils.csv_handler import save_to_csv
+from utils.transform_utils import get_response_with_session, get_soup_df, transform_date_to_string
 
-def fill_missing_data(issuer_dates):
-    now = datetime.now()
-    for issuer, last_date in issuer_dates.items():
-        if last_date is None:
-            print(f"Warning: No last date found for issuer {issuer}. Using a default date.")
-            last_date_obj = now - timedelta(days=365 * 10)
-        else:
-            last_date_obj = datetime.strptime(last_date, "%d.%m.%Y")
-
-        if last_date_obj.date() != now.date():
-            update_missing_data(issuer, last_date_obj)
-    return issuer_dates
-
-
-def update_missing_data(issuer, last_date):
+def fetch_data_for_issuer(issuer, last_checked_date):
     new_data = pd.DataFrame(columns=[
         "Date", "Price of last transaction", "Max.", "Min.", "Average price",
         "%prom.", "Quantity", "BEST turnover in denars", "Total turnover in denars"
     ])
+
     session = requests.Session()
     now = datetime.now()
-    years_needed = int((now - last_date).days / 364) + 1
+    years_needed = int((now - last_checked_date).days / 364) + 1
 
     for i in range(years_needed):
-        url = generate_url(issuer, i, last_date)
+        url = generate_url(issuer, i, last_checked_date)
         soup = get_response_with_session(url, session)
         temp_data = get_soup_df(soup)
 
@@ -40,30 +26,71 @@ def update_missing_data(issuer, last_date):
         new_data = pd.concat([new_data, temp_data], ignore_index=True)
 
     new_data = new_data.drop_duplicates(subset=["Date"])
-
     new_data["Date"] = pd.to_datetime(new_data["Date"], format="%d.%m.%Y")
     new_data = new_data.sort_values(by="Date")
 
-    new_data.columns = [
+    new_data["BEST turnover in denars"] = pd.to_numeric(
+        new_data["BEST turnover in denars"].apply(lambda x: str(x).replace(',', '')
+                                                  .strip() if isinstance(x, str) else x), errors='coerce'
+    )
+    new_data["Total turnover in denars"] = pd.to_numeric(
+        new_data["Total turnover in denars"].apply(lambda x: str(x).replace(',', '')
+                                                   .strip() if isinstance(x, str) else x), errors='coerce'
+    )
+
+    filtered_data = new_data[
+        (new_data["BEST turnover in denars"] != 0) |
+        (new_data["Total turnover in denars"] != 0)
+    ]
+
+    filtered_data.loc[:, "BEST turnover in denars"] = filtered_data["BEST turnover in denars"].fillna(0)
+    filtered_data.loc[:, "Total turnover in denars"] = filtered_data["Total turnover in denars"].fillna(0)
+
+    if not filtered_data.empty:
+        save_to_csv(issuer, filtered_data)
+    else:
+        print(f"No valid data for issuer {issuer} to save.")
+
+    return filtered_data
+
+def fill_missing_data(issuer, last_checked_date):
+    print(f"Last checked date for {issuer}: {last_checked_date}")
+
+    now = datetime.now()
+    if last_checked_date.date() != now.date():
+        print(f"Fetching data from {last_checked_date.strftime('%d.%m.%Y')} to {now.strftime('%d.%m.%Y')}")
+        update_missing_data(issuer, last_checked_date)
+
+    update_last_checked_date(now)
+
+def update_missing_data(issuer, last_checked_date):
+    new_data = fetch_data_for_issuer(issuer, last_checked_date)
+    if new_data is not None:
+        process_and_save_data(issuer, new_data)
+
+def process_and_save_data(issuer, data):
+    data.columns = [
         "Датум", "Цена на последна трансакција", "Мак.", "Мин.", "Просечна цена",
         "%пром.", "Количина", "Промет во БЕСТ во денари", "Вкупен промет во денари"
     ]
 
-    new_data["Промет во БЕСТ во денари"] = pd.to_numeric(new_data["Промет во БЕСТ во денари"].str.replace(',', '').str.strip(), errors='coerce')
-    new_data["Вкупен промет во денари"] = pd.to_numeric(new_data["Вкупен промет во денари"].str.replace(',', '').str.strip(), errors='coerce')
+    data = filter_data(data)
 
-    new_data = new_data[
-        (new_data["Промет во БЕСТ во денари"] != 0) |
-        (new_data["Вкупен промет во денари"] != 0)
+    save_to_csv(issuer, data)
+
+def filter_data(data):
+    data["Промет во БЕСТ во денари"] = pd.to_numeric(data["Промет во БЕСТ во денари"]
+                                                     .apply(lambda x: str(x).replace(',', '')
+                                                            .strip() if isinstance(x, str) else x), errors='coerce')
+    data["Вкупен промет во денари"] = pd.to_numeric(data["Вкупен промет во денари"]
+                                                    .apply(lambda x: str(x).replace(',', '')
+                                                           .strip() if isinstance(x, str) else x), errors='coerce')
+
+    filtered_data = data[
+        (data["Промет во БЕСТ во денари"] != 0) | (data["Вкупен промет во денари"] != 0)
     ]
 
-    new_data["Промет во БЕСТ во денари"] = new_data["Промет во БЕСТ во денари"].fillna(0)
-    new_data["Вкупен промет во денари"] = new_data["Вкупен промет во денари"].fillna(0)
-
-    new_data["Датум"] = new_data["Датум"].dt.strftime('%d.%m.%Y')
-
-    if not new_data.empty:
-        save_to_csv(issuer, new_data)
+    return filtered_data
 
 def generate_url(issuer, i, last_date):
     url = f'https://www.mse.mk/mk/stats/symbolhistory/{issuer.lower()}'
@@ -76,4 +103,5 @@ def generate_url(issuer, i, last_date):
     if from_date < last_date:
         from_date = last_date + timedelta(days=1)
 
-    return url + f'?FromDate={transform_date_to_string(from_date)}&ToDate={transform_date_to_string(to_date)}&Code={issuer}'
+    return url + (f'?FromDate={transform_date_to_string(from_date)}'
+                  f'&ToDate={transform_date_to_string(to_date)}&Code={issuer}')

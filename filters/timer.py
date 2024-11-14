@@ -1,4 +1,3 @@
-#filters.timer.py
 import time
 
 def timer_start():

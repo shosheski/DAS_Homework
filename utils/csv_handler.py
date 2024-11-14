@@ -1,4 +1,3 @@
-#utils.csv_handler.py
 import os
 import pandas as pd
 
@@ -9,9 +8,18 @@ def save_to_csv(issuer, data):
         print(f"Error: Invalid data format for issuer {issuer}. Expected a DataFrame.")
         return
 
+    data.columns = data.columns.str.strip()
+
+    print("Columns in data:", data.columns)
+
+    if "Промет во БЕСТ во денари" not in data.columns or "Вкупен промет во денари" not in data.columns:
+        print(f"Error: Missing expected columns for issuer {issuer}. Skipping save...")
+        return
+
     filtered_data = data[
-        (data["Промет во БЕСТ во денари"] != 0) | (data["Вкупен промет во денари"] != 0)
-    ]
+        (data["Промет во БЕСТ во денари"].notna() & (data["Промет во БЕСТ во денари"] != 0)) |
+        (data["Вкупен промет во денари"].notna() & (data["Вкупен промет во денари"] != 0))
+        ]
 
     print(f"Filtered data for issuer {issuer}: {filtered_data}")
 
@@ -21,8 +29,8 @@ def save_to_csv(issuer, data):
 
     project_root = os.path.dirname(os.path.abspath(__file__))
     database_dir = os.path.join(project_root, '..', 'database')
-
     output_dir = os.path.join(database_dir, f"{issuer}.csv")
+
     os.makedirs(database_dir, exist_ok=True)
 
     try:
