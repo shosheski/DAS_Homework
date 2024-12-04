@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/DAS_Homework.iml" filepath="$PROJECT_DIR$/.idea/DAS_Homework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Homework1/.idea/DAS_Homework.iml" filepath="$PROJECT_DIR$/Homework1/.idea/DAS_Homework.iml" />
     </modules>
   </component>
 </project>
