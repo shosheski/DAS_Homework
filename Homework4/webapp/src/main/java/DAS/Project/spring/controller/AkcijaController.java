@@ -54,7 +54,6 @@ public class AkcijaController {
                                               @RequestParam(defaultValue = "2024") Integer toYear) {
         try {
             List<AkcijaData> stockData = CSV_Processor.loadCSV("./database/" + companySelected + ".csv");
-
             List<Double> prices = stockData.stream().filter(sd -> getYear(sd.date) >= fromYear && getYear(sd.date) <= toYear).map(d -> d.closePrice).toList();
             List<Double> sma10 = AkcijaAnalyzer.calculateSMA(prices, 10);
             List<Double> rsi14 = AkcijaAnalyzer.calculateRSI(prices, 14);
@@ -84,8 +83,7 @@ public class AkcijaController {
                                             @RequestParam(defaultValue = "2014") Integer fromYear,
                                             @RequestParam(defaultValue = "2024") Integer toYear) {
         try {
-            List<AkcijaData> stockData = CSV_Processor.loadCSV("./database/" + companySelected + ".csv");
-            List<AkcijaData> filteredData = stockData.stream()
+            List<AkcijaData> stockData = CSV_Processor.loadCSV("./database/" + companySelected + ".csv");            List<AkcijaData> filteredData = stockData.stream()
                     .filter(sd -> getYear(sd.date) >= fromYear && getYear(sd.date) <= toYear)
                     .filter(sd -> sd.high != null)
                     .collect(Collectors.toList());

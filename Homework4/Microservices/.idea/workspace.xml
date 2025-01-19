@@ -6,19 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="8b3b54aa-7408-44dd-a6df-d19b908e24df" name="Changes" comment="">
       <change afterPath="$PROJECT_DIR$/../../Homework2/tech prototype/.idea/tech prototype.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Homework1/utils/csv_handler.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Homework2/tech prototype/spring/src/main/java/DAS/Project/spring/controller/ObjectController.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Homework2/tech prototype/spring/src/main/java/DAS/Project/spring/model/Object.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Homework2/tech prototype/spring/src/main/java/DAS/Project/spring/repository/ObjectRepository.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Homework2/tech prototype/spring/src/main/java/DAS/Project/spring/services/ObjectService.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Homework2/tech prototype/spring/src/main/java/DAS/Project/spring/services/impl/ObjectServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LineChartMicroService/src/main/resources/templates/table.html" beforeDir="false" afterPath="$PROJECT_DIR$/LineChartMicroService/src/main/resources/templates/table.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mikroservis.mp4" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../webapp/src/main/java/DAS/Project/spring/controller/AkcijaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../webapp/src/main/java/DAS/Project/spring/controller/AkcijaController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../webapp/src/main/resources/templates/table.html" beforeDir="false" afterPath="$PROJECT_DIR$/../webapp/src/main/resources/templates/table.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +45,7 @@
     "Spring Boot.Application.executor": "Run",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Andrej/IdeaProjects/DAS_Homework/Homework4/webapp",
+    "last_opened_file_path": "C:/Users/Andrej/IdeaProjects/DAS_Homework/Homework4",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
@@ -60,6 +56,11 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Andrej\IdeaProjects\DAS_Homework\Homework4\Microservices" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
@@ -88,6 +89,8 @@
       <updated>1737305367418</updated>
       <workItem from="1737305368462" duration="90000" />
       <workItem from="1737316432464" duration="1072000" />
+      <workItem from="1737319835410" duration="340000" />
+      <workItem from="1737320189085" duration="10000" />
     </task>
     <servers />
   </component>
