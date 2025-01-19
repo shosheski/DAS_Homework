@@ -5,12 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8b3b54aa-7408-44dd-a6df-d19b908e24df" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../Homework2/tech prototype/.idea/tech prototype.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Homework1/utils/csv_handler.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Homework2/tech prototype/spring/src/main/java/DAS/Project/spring/controller/ObjectController.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Homework2/tech prototype/spring/src/main/java/DAS/Project/spring/model/Object.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Homework2/tech prototype/spring/src/main/java/DAS/Project/spring/repository/ObjectRepository.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Homework2/tech prototype/spring/src/main/java/DAS/Project/spring/services/ObjectService.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Homework2/tech prototype/spring/src/main/java/DAS/Project/spring/services/impl/ObjectServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LineChartMicroService/src/main/resources/templates/table.html" beforeDir="false" afterPath="$PROJECT_DIR$/LineChartMicroService/src/main/resources/templates/table.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../webapp/src/main/java/DAS/Project/spring/controller/AkcijaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../webapp/src/main/java/DAS/Project/spring/controller/AkcijaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../webapp/src/main/resources/templates/table.html" beforeDir="false" afterPath="$PROJECT_DIR$/../webapp/src/main/resources/templates/table.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,9 +28,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 6
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="2rr7W1DMs4UbA4gkf7MUZOkeVhN" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -33,10 +41,17 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.Application.executor": "Run",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Andrej/IdeaProjects/DAS_Homework/Homework4/Microservices/LineChartMicroService",
+    "last_opened_file_path": "C:/Users/Andrej/IdeaProjects/DAS_Homework/Homework4/webapp",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Project",
@@ -45,6 +60,16 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="spring" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="DAS.Project.spring.Application" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -62,6 +87,7 @@
       <option name="presentableId" value="Default" />
       <updated>1737305367418</updated>
       <workItem from="1737305368462" duration="90000" />
+      <workItem from="1737316432464" duration="1072000" />
     </task>
     <servers />
   </component>

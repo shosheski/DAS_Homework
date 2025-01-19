@@ -33,13 +33,11 @@ public class AkcijaController {
     }
 
     @GetMapping("/table/stats")
-    public Map<String, Object> getStats(@RequestParam(defaultValue = "ALK") String companySelected,
+    public Map<String, Object> getStats(@RequestParam(defaultValue = "ADIN") String companySelected,
                                         @RequestParam(defaultValue = "2014") Integer fromYear,
                                         @RequestParam(defaultValue = "2024") Integer toYear) {
         try {
             List<AkcijaData> stockData = CSV_Processor.loadCSV("./database/" + companySelected + ".csv");
-
-
             Map<String, Object> response = new HashMap<>();
 
             response.put("data", stockData.get(0));
@@ -82,12 +80,11 @@ public class AkcijaController {
     }
 
     @GetMapping("/table/statistics")
-    public Map<String, Object> getStatsData(@RequestParam(defaultValue = "ALK") String companySelected,
+    public Map<String, Object> getStatsData(@RequestParam(defaultValue = "ADIN") String companySelected,
                                             @RequestParam(defaultValue = "2014") Integer fromYear,
                                             @RequestParam(defaultValue = "2024") Integer toYear) {
         try {
             List<AkcijaData> stockData = CSV_Processor.loadCSV("./database/" + companySelected + ".csv");
-
             List<AkcijaData> filteredData = stockData.stream()
                     .filter(sd -> getYear(sd.date) >= fromYear && getYear(sd.date) <= toYear)
                     .filter(sd -> sd.high != null)

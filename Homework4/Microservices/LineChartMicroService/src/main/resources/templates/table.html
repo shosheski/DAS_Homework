@@ -3,116 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Table</title>
+    <title>Stock Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background-color: #1e1e1e;
-            color: #ffffff;
+            box-sizing: border-box;
         }
-
-        .container {
-            display: grid;
-            grid-template-columns: 1fr 3fr;
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
             height: 100vh;
+            overflow: hidden;
         }
-
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
         .sidebar {
-            background-color: #0a5a59;
-            padding: 20px;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            width: 250px;
+            padding: 30px;
+            color: #ecf0f1;
             display: flex;
             flex-direction: column;
             gap: 20px;
+            border-radius: 8px 0 0 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
         }
-
         .sidebar h2 {
             text-align: center;
-            color: #000;
+            font-size: 1.5em;
+            margin-bottom: 30px;
         }
-
+        .sidebar select, .sidebar button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1em;
+        }
         .sidebar select {
-            width: 150%;
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
+            background-color: #ecf0f1;
+            color: #34495e;
         }
-
         .sidebar button {
-            padding: 14px;
-            background-color: #073d69;
+            background-color: #1abc9c;
             color: white;
-            border: none;
-            border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
-
+        .sidebar button:hover {
+            background-color: #16a085;
+        }
         .content {
+            flex-grow: 1;
+            padding: 30px;
             display: flex;
             flex-direction: column;
-            padding: 20px;
-            gap: 20px;
+            gap: 30px;
         }
-
         .header {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 10px;
-        }
-
-        .header div {
-            background-color: #1d7050;
-            padding: 20px;
             text-align: center;
-            border-radius: 5px;
         }
-
-        .charts {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 25px;
-            height: 111%;
-        }
-
-        .chart {
-            background-color: #802525;
-            border-radius: 5px;
+        .header div {
+            background-color: #3498db;
+            color: #ecf0f1;
             padding: 20px;
-            overflow-y: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-
         .header span {
-            color: black;
             font-weight: bold;
         }
-
+        .charts {
+            display: flex;
+            gap: 20px;
+            height: 100%;
+        }
+        .chart {
+            background-color: #ffffff;
+            flex-grow: 1;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .chart canvas {
+            width: 100%;
+            height: 100%;
+        }
         .statistics {
-            font-size: 0.9em;
-            line-height: 1.5;
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-
         .statistics h3 {
-            color: #6bcbb3;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            color: #2980b9;
         }
-
         .statistics ul {
             list-style-type: none;
-            padding: 0;
+            padding-left: 0;
         }
-
         .statistics ul li {
             margin-bottom: 10px;
+            color: #7f8c8d;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="sidebar">
-        <h2>Stocky</h2>
+        <h2>Stock Dashboard</h2>
         <label for="fromYear">From Year</label>
         <select name="fromYear" id="fromYear">
             <option selected value="2014">2014</option>
@@ -146,28 +157,30 @@
             <option selected value="ADIN">ADIN</option>
         </select>
 
-        <button onclick="reloadData()">Add Filter</button>
+        <button onclick="reloadData()">Apply Filters</button>
     </div>
 
     <div class="content">
         <div class="header">
-            <div>Последна цена на трансакција<br><span id="lastPrice">value</span></div>
-            <div>Мак.<br><span id="maxValue">value</span></div>
-            <div>Мин.<br><span id="minValue">value</span></div>
-            <div>Просечна цена<br><span id="average">value</span></div>
-            <div>Количина<br><span id="quantity">value</span></div>
+            <div>Last Price<br><span id="lastPrice">value</span></div>
+            <div>Max Price<br><span id="maxValue">value</span></div>
+            <div>Min Price<br><span id="minValue">value</span></div>
+            <div>Avg Price<br><span id="average">value</span></div>
+            <div>Quantity<br><span id="quantity">value</span></div>
         </div>
 
         <div class="charts">
-            <canvas class="chart" id="lineChart"></canvas>
+            <div class="chart" id="lineChartContainer">
+                <canvas id="lineChart"></canvas>
+            </div>
             <div class="chart" id="statistics">
                 <div class="statistics">
-                    <h3>Осцилатори и Подвижни просеци (MA)</h3>
-                    <p>Осцилатори и Подвижни просеци се технички индикатори што се користат за анализа на историските цени и обем на тргување, цел да се предвидат и други на ново и да се донесат купување или продавање акции.</p>
+                    <h3>Oscillators & Moving Averages</h3>
+                    <p>Oscillators and Moving Averages are technical indicators used to analyze price trends and trading volumes to predict future movements.</p>
                     <ul>
-                        <li>Изберете 10 најдобри технички индикатори (Осцилатори и МА).</li>
-                        <li>Пресметајте ги нивните вредности во 3 временски рамки (1 ден, 1 недела, 1 месец).</li>
-                        <li>Генерирајте сигнали (купи, продај, задржи).</li>
+                        <li>Select top 10 technical indicators (Oscillators and MAs).</li>
+                        <li>Calculate their values for 3 time frames (1 day, 1 week, 1 month).</li>
+                        <li>Generate signals (buy, sell, hold).</li>
                     </ul>
                 </div>
             </div>
@@ -176,98 +189,85 @@
 </div>
 
 <script>
-    let isFirst = true
+    let isFirst = true;
     let lineChartInstance;
 
     function fetchTableData(urlParams) {
         fetch(`http://localhost:8081/api/stocks/table/stats?${urlParams}`)
-            .then(response => response.json())
-            .then(data => {
-                const stats = data.data;
-                document.getElementById('minValue').textContent = stats.low;
-                document.getElementById('maxValue').textContent = stats.high;
-                document.getElementById('lastPrice').textContent = stats.closePrice;
-                document.getElementById('average').textContent = stats.avgPrice;
-                document.getElementById('quantity').textContent = stats.volume;
-            })
-            .catch(error => console.error('Error fetching stats:', error));
+                .then(response => response.json())
+                .then(data => {
+                    const stats = data.data;
+                    document.getElementById('minValue').textContent = stats.low;
+                    document.getElementById('maxValue').textContent = stats.high;
+                    document.getElementById('lastPrice').textContent = stats.closePrice;
+                    document.getElementById('average').textContent = stats.avgPrice;
+                    document.getElementById('quantity').textContent = stats.volume;
+                })
+                .catch(error => console.error('Error fetching stats:', error));
     }
-
 
     function fetchLineChart(urlParams) {
         fetch(`http://localhost:8081/api/stocks/table/lineChart?${urlParams}`)
-            .then(response => response.json())
-            .then(data => {
-                const reversedDates = data.dates.reverse();
-                const reversedPrices = data.prices.reverse();
-                const reversedSMA = data.sma.reverse();
-                const reversedSignals = data.signals.reverse();
+                .then(response => response.json())
+                .then(data => {
+                    const reversedDates = data.dates.reverse();
+                    const reversedPrices = data.prices.reverse();
+                    const reversedSMA = data.sma.reverse();
+                    const reversedSignals = data.signals.reverse();
 
-                if (lineChartInstance) {
-                    lineChartInstance.destroy();
-                }
-
-                const canvas = document.getElementById('lineChart');
-                canvas.style.height = "86vh";
-                canvas.style.width = "50vw";
-                const ctx = canvas.getContext('2d');
-
-                lineChartInstance = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: reversedDates,
-                        datasets: [
-                            {
-                                label: 'Stock Prices',
-                                data: reversedPrices,
-                                borderColor: 'blue',
-                                fill: false,
-                                tension: 0.1
-                            },
-                            {
-                                label: 'SMA (10)',
-                                data: reversedSMA,
-                                borderColor: 'orange',
-                                fill: false,
-                                tension: 0.1
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: false,
-                        plugins: {
-                            annotation: {
-                                annotations: reversedSignals.map((signal, index) => ({
-                                    type: 'point',
-                                    xValue: reversedDates[index],
-                                    yValue: reversedPrices[index],
-                                    backgroundColor: signal === 'Buy' ? 'green' : (signal === 'Sell' ? 'red' : 'yellow')
-                                }))
-                            }
-                        }
+                    if (lineChartInstance) {
+                        lineChartInstance.destroy();
                     }
-                });
-            })
-            .catch(error => console.error('Error fetching chart data:', error));
+
+                    const canvas = document.getElementById('lineChart');
+                    const ctx = canvas.getContext('2d');
+
+                    lineChartInstance = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: reversedDates,
+                            datasets: [
+                                {
+                                    label: 'Stock Prices',
+                                    data: reversedPrices,
+                                    borderColor: 'blue',
+                                    fill: false,
+                                    tension: 0.1
+                                },
+                                {
+                                    label: 'SMA (10)',
+                                    data: reversedSMA,
+                                    borderColor: 'orange',
+                                    fill: false,
+                                    tension: 0.1
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true
+                        }
+                    });
+                })
+                .catch(error => console.error('Error fetching chart data:', error));
     }
 
     function fetchStatisticsData(urlParams) {
         fetch(`http://localhost:8081/api/stocks/table/statistics?${urlParams}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log("Fetched Data:", data);  // Log the response to inspect the structure
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Fetched Data:", data);
 
-                const statisticsDiv = document.getElementById('statistics');
+                    const statisticsDiv = document.getElementById('statistics');
 
-                const sma = data.sma || {};  // Use empty object as fallback if undefined
-                const oscillators = data.oscillators || {};  // Use empty object as fallback if undefined
-                const signals = data.signals || [];  // Use empty array as fallback if undefined
+                    const sma = data.sma || {};
+                    const oscillators = data.oscillators || {};
+                    const signals = data.signals || [];
 
-                const rsiDaily = oscillators.rsiDaily ? oscillators.rsiDaily[oscillators.rsiDaily.length - 1] : 'N/A';
-                const rsiWeekly = oscillators.rsiWeekly ? oscillators.rsiWeekly[oscillators.rsiWeekly.length - 1] : 'N/A';
-                const rsiMonthly = oscillators.rsiMonthly ? oscillators.rsiMonthly[oscillators.rsiMonthly.length - 1] : 'N/A';
+                    const rsiDaily = oscillators.rsiDaily ? oscillators.rsiDaily[oscillators.rsiDaily.length - 1] : 'N/A';
+                    const rsiWeekly = oscillators.rsiWeekly ? oscillators.rsiWeekly[oscillators.rsiWeekly.length - 1] : 'N/A';
+                    const rsiMonthly = oscillators.rsiMonthly ? oscillators.rsiMonthly[oscillators.rsiMonthly.length - 1] : 'N/A';
 
-                const statsHtml = `
+                    const statsHtml = `
                 <h3>Осцилатори и Moving Averages</h3>
                 <h4>Осцилатори</h4>
                 <ul>
@@ -292,58 +292,33 @@
                 <p>Сигнал: ${signals.length > 0 ? signals[signals.length - 1] : 'N/A'}</p>
             `;
 
-                statisticsDiv.innerHTML = statsHtml;
-            })
-            .catch(error => {
-                console.error('Error fetching technical indicators:', error);
-                document.getElementById('statistics').textContent = 'Error loading statistics.';
-            });
-    }
-
-    function loadPage() {
-        if (isFirst) {
-            isFirst = false
-            fetch('http://localhost:8080/api/stocks/issuers')
-                .then(response => response.json())
-                .then(data => {
-                    const companies = data;
-                    const companySelect = document.getElementById('company');
-                    companies.forEach(company => {
-                        if (company !== "ADIN") {
-                            const option = document.createElement('option');
-                            option.value = company;
-                            option.textContent = company;
-                            companySelect.appendChild(option);
-                        }
-                    });
+                    statisticsDiv.innerHTML = statsHtml;
                 })
-                .catch(error => console.error('Error fetching companies:', error));
-
-            fetchTableData()
-            fetchLineChart()
-            fetchStatisticsData()
-        }
+                .catch(error => {
+                    console.error('Error fetching technical indicators:', error);
+                    document.getElementById('statistics').textContent = 'Error loading statistics.';
+                });
     }
+
 
     function reloadData() {
         const fromYear = document.getElementById('fromYear').value;
         const toYear = document.getElementById('toYear').value;
-        const companySelected = document.getElementById('company').value;
+        const company = document.getElementById('company').value;
 
-        const urlParams = new URLSearchParams({ fromYear, toYear, companySelected });
+        const urlParams = new URLSearchParams({ fromYear, toYear, companySelected: company });
 
-        fetchTableData(urlParams);
-        fetchLineChart(urlParams);
-        fetchStatisticsData(urlParams);
+        fetchTableData(urlParams.toString());
+        fetchLineChart(urlParams.toString());
+        fetchStatisticsData(urlParams.toString());
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        fetchTableData();
-        fetchLineChart();
-        fetchStatisticsData();
-    });
-
-    loadPage()
+    window.onload = () => {
+        if (isFirst) {
+            reloadData();
+            isFirst = false;
+        }
+    };
 </script>
 </body>
 </html>
