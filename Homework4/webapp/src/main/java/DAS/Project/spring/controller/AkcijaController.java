@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,11 +37,43 @@ public class AkcijaController {
                                         @RequestParam(defaultValue = "2014") Integer fromYear,
                                         @RequestParam(defaultValue = "2024") Integer toYear) {
         try {
-            List<AkcijaData> stockData = CSV_Processor.loadCSV("C:\\Users\\Andrej\\IdeaProjects\\DAS_Homework\\Homework1\\database\\" + companySelected + ".csv");
+            List<AkcijaData> stockData = CSV_Processor.loadCSV("./database/" + companySelected + ".csv");
+
 
             Map<String, Object> response = new HashMap<>();
 
             response.put("data", stockData.get(0));
+
+            return response;
+        } catch (Exception e) {
+            throw new RuntimeException("Error processing CSV file", e);
+        }
+    }
+
+    @GetMapping("/table/lineChart")
+    public Map<String, Object> getCompanyData(@RequestParam(defaultValue = "ADIN") String companySelected,
+                                              @RequestParam(defaultValue = "2014") Integer fromYear,
+                                              @RequestParam(defaultValue = "2024") Integer toYear) {
+        try {
+            List<AkcijaData> stockData = CSV_Processor.loadCSV("./database/" + companySelected + ".csv");
+
+            List<Double> prices = stockData.stream().filter(sd -> getYear(sd.date) >= fromYear && getYear(sd.date) <= toYear).map(d -> d.closePrice).toList();
+            List<Double> sma10 = AkcijaAnalyzer.calculateSMA(prices, 10);
+            List<Double> rsi14 = AkcijaAnalyzer.calculateRSI(prices, 14);
+
+            List<String> signals = new ArrayList<>();
+            for (int i = 0; i < prices.size(); i++) {
+                double sma = sma10.get(i);
+                double rsi = rsi14.get(i);
+                signals.add(AkcijaAnalyzer.generateSignal(rsi, sma, prices.get(i)));
+            }
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("dates", stockData.stream().filter(sd -> getYear(sd.date) >= fromYear && getYear(sd.date) <= toYear).map(d -> d.date).toList());
+            response.put("prices", prices);
+            response.put("sma", sma10);
+            response.put("rsi", rsi14);
+            response.put("signals", signals);
 
             return response;
         } catch (Exception e) {
@@ -53,7 +86,8 @@ public class AkcijaController {
                                             @RequestParam(defaultValue = "2014") Integer fromYear,
                                             @RequestParam(defaultValue = "2024") Integer toYear) {
         try {
-            List<AkcijaData> stockData = CSV_Processor.loadCSV("C:\\Users\\Andrej\\IdeaProjects\\DAS_Homework\\Homework1\\database\\" + companySelected + ".csv");
+            List<AkcijaData> stockData = CSV_Processor.loadCSV("./database/" + companySelected + ".csv");
+
             List<AkcijaData> filteredData = stockData.stream()
                     .filter(sd -> getYear(sd.date) >= fromYear && getYear(sd.date) <= toYear)
                     .filter(sd -> sd.high != null)

@@ -195,7 +195,7 @@
 
 
     function fetchLineChart(urlParams) {
-        fetch(`http://localhost:8081/api/stocks/table/lineChart?${urlParams}`)
+        fetch(`http://localhost:8080/api/stocks/table/lineChart?${urlParams}`)
             .then(response => response.json())
             .then(data => {
                 const reversedDates = data.dates.reverse();
